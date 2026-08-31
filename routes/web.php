@@ -1,10 +1,16 @@
 <?php
 
+
 use App\Http\Controllers\Admin\BrandController;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\OrderController;
+use App\Http\Controllers\CartController;
+use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\Admin\ProductController;
+use App\Http\Controllers\ShopController;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,6 +23,30 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::get('/', [ShopController::class, 'home'])->name('home');
+Route::get('/shop', [ShopController::class, 'shop'])->name('shop');
+Route::get('/product/{product:slug}', [ShopController::class, 'product'])->name('product.show');
+
+Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
+Route::post('/cart/add/{product}', [CartController::class, 'add'])->name('cart.add');
+Route::put('/cart/update/{product}', [CartController::class, 'update'])->name('cart.update');
+Route::delete('/cart/remove/{product}', [CartController::class, 'remove'])->name('cart.remove');
+Route::delete('/cart/clear', [CartController::class, 'clear'])->name('cart.clear');
+
+Route::get(
+    '/checkout',
+    [CheckoutController::class, 'index']
+)->name('checkout.index');
+
+Route::post(
+    '/checkout',
+    [CheckoutController::class, 'store']
+)->name('checkout.store');
+
+Route::get(
+    '/checkout/success/{order}',
+    [CheckoutController::class, 'success']
+)->name('checkout.success');
 /*
 |--------------------------------------------------------------------------
 | Coustomer Routes
@@ -58,6 +88,16 @@ Route::middleware(['auth', 'admin'])
         Route::delete('/categories/{category}', [CategoryController::class, 'destroy'])->name('categories.destroy');
 
         Route::resource('brands', BrandController::class);
+        Route::resource('products', ProductController::class);
+
+        Route::resource(
+    'orders',
+    OrderController::class
+)->only([
+    'index',
+    'show',
+    'update',
+]);
 
     });
 

@@ -67,7 +67,7 @@
 
                 <li class="nav-item">
                     <a
-                        href="#"
+                        href="{{ route('admin.products.index') }}"
                         class="nav-link text-white"
                     >
                         Products
@@ -76,7 +76,7 @@
 
                 <li class="nav-item">
                     <a
-                        href="#"
+                        href="{{ route('admin.orders.index') }}"
                         class="nav-link text-white"
                     >
                         Orders
